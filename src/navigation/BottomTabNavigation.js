@@ -37,7 +37,7 @@ const BottomTabNavigation = () => {
                 ),
                 tabBarLabel: strings['Профиль']
             }
-        }
+        },
     ]
 
     return (

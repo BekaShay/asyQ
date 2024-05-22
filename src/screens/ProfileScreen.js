@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { getObject, removeStorage } from '../storage/AsyncStorage';
 import { APP_STORAGE } from '../constants/const';
@@ -9,14 +9,50 @@ import { data } from '../data/MainData';
 import PrimaryButton from '../components/PrimaryButton';
 import { IconSetting } from '../assets/icons/icons';
 import { APP_ROUTES } from '../constants/routes';
+import { setFontStyles } from '../utils/setFontStyle';
 
 const ProfileScreen = ({ navigation }) => {
     const [profileData, setProfileDate] = useState(null);
 
+    const [progressDay, setProgressDay] = useState(0);
+    const [progressMonth, setProgressMonth] = useState(0);
+    const [progressYear, setProgressYear] = useState(0);
+
     useEffect(() => {
         (async () => {
             const profile = await getObject(APP_STORAGE.userProfile);
+            console.log("ProfileData", profile);
             setProfileDate(profile);
+
+            const progress = await getObject(APP_STORAGE.userProgress);
+            console.log("prgoress response", progress);
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear();
+            const currentMonth = ('0' + (currentDate.getMonth() + 1)).slice(-2); // добавляем 1 и форматируем месяц
+            const currentDay = ('0' + currentDate.getDate()).slice(-2); // форматируем день
+
+            console.log("Today date", currentDay, currentMonth, currentYear);
+
+            // Данные за сегодняшний день
+            const progressForToday = await progress?.words?.filter(item => {
+                return item?.date.split('.')[0] == currentDay;
+            });
+            console.log("progressForToday", progressForToday);
+            setProgressDay(progressForToday.reduce((sum, item) => sum + item.wordCount, 0));
+
+            // Данные за текущий месяц
+            const progressForCurrentMonth = await progress?.words.filter(item => {
+                return item?.date.split('.')[1] == currentMonth;
+            });
+            console.log("progressForCurrentMonth", progressForCurrentMonth);
+            setProgressMonth(progressForCurrentMonth.reduce((sum, item) => sum + item.wordCount, 0));
+
+            // Данные за текущий год
+            const progressForCurrentYear = await progress?.words.filter(item => {
+                return item?.date.split('.')[2] == currentYear;
+            });
+            console.log("progressForCurrentYear", progressForCurrentYear);
+            setProgressYear(progressForCurrentYear.reduce((sum, item) => sum + item.wordCount, 0));
         })();
     }, [])
 
@@ -30,14 +66,13 @@ const ProfileScreen = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.view}>
+        <ScrollView style={styles.view}>
             <View style={styles.card1}>
                 <TouchableOpacity style={styles.editProfile} onPress={EditProfile}><IconSetting /></TouchableOpacity>
-                <FormTitle logo title={profileData?.name} text={strings['Возраст'] + ': ' + profileData?.age} />
+                <FormTitle logo title={profileData?.name} text={strings['Цель'] + ': ' + profileData?.target} />
             </View>
             <View style={styles.card2}>
-                <FormTitle title='Progress' />
-                <Text>Cards</Text>
+                <FormTitle title={strings['Прогресс']} text={strings['Темы'] + ": " + data.length + " / " + profileData?.card.length} />
                 <View style={styles.line}>
                     <View
                         style={{
@@ -45,12 +80,15 @@ const ProfileScreen = ({ navigation }) => {
                             width: `${(profileData?.card.length / data.length) * 100}%`,
                         }} />
                 </View>
+                <Text style={styles.progressText}>{" • " + strings["Прогресс за День"] + " : " + progressDay + " " + strings["Слов"]}</Text>
+                <Text style={styles.progressText}>{" • " + strings["Прогресс за Месяць"] + " : " + progressMonth + " " + strings["Слов"]}</Text>
+                <Text style={styles.progressText}>{" • " + strings["Прогресс за Год"] + " : " + progressYear + " " + strings["Слов"]}</Text>
             </View>
             <View style={styles.card3}>
                 <FormTitle title={strings['Настройки']} />
                 <PrimaryButton style={styles.refreshButton} text='Сброс данных' onPress={RefreshData} />
             </View>
-        </View>
+        </ScrollView>
     )
 }
 
@@ -90,7 +128,10 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
     },
     line: {
-        height: 3,
+        marginTop: 12,
+        marginBottom: 10,
+        height: 5,
+        borderRadius: 2,
         width: "100%",
         backgroundColor: APP_COLORS.BORDER,
         flexDirection: 'row',
@@ -99,4 +140,9 @@ const styles = StyleSheet.create({
         marginVertical: 12,
         backgroundColor: APP_COLORS.WRONG,
     },
+    progressText: {
+        ...setFontStyles(16, '500', APP_COLORS.TEXT_COLOR_GRAY),
+        marginTop: 12,
+        marginLeft: 4,
+    }
 })

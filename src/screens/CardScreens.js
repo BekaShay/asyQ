@@ -5,14 +5,20 @@ import { APP_COLORS } from '../constants/colors';
 import { setFontStyles } from '../utils/setFontStyle';
 import { APP_ROUTES } from '../constants/routes';
 import { strings } from '../localization/localization';
+import ModalMessage from '../components/ModalMessage';
+import FormTitle from '../components/FormTitle';
 
 const CardScreens = ({ navigation, route }) => {
     const data = route?.params;
+    const [count, setCount] = useState(1);
+    const [message, setMessage] = useState(0);
+    console.log(count);
 
     useEffect(() => {
         navigation.setOptions({
             title: data?.theme,
         });
+        console.log("CardScreens/useEffect/data", data);
     }, [])
 
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -22,14 +28,32 @@ const CardScreens = ({ navigation, route }) => {
         setShowDefinition(!showDefinition);
     };
 
+    const getText = () => {
+        if(count % 10 == 0 && count != 1 && count != 0) {
+            return strings['Ты выучил 10 слов🎉'];
+        }
+        else if(count % 5 == 0 && count != 1 && count != 0) {
+            return "Жарайсың👏🏻";
+        }
+        return "Жарайсың👏🏻";
+    }
+
     const goToNextCard = () => {
         setShowDefinition(false);
         setCurrentIndex((prevIndex) => (prevIndex + 1) % data?.card.length);
+        setCount(prev => prev + 1);
+        if (count % 9 == 0 && count != 0) {
+            setMessage(1);
+        }
+        else if( count % 5 == 0 && count != 0) {
+            setMessage(1);
+        }
     };
 
     const goToPreviousCard = () => {
         setShowDefinition(false);
         setCurrentIndex((prevIndex) => (prevIndex - 1 + data?.card.length) % data?.card.length);
+        setCount(prev => prev - 1);
     };
 
     const goToTest = () => {
@@ -54,6 +78,9 @@ const CardScreens = ({ navigation, route }) => {
                     <PrimaryButton text={strings['Начать тест']} onPress={goToTest} />
                 )}
             </View>
+            <ModalMessage setValue={setMessage} value={message}>
+                <FormTitle title={getText()} text={strings["Молодец"]} />
+            </ModalMessage>
         </View>
     );
 };

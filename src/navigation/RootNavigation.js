@@ -11,6 +11,7 @@ import CardScreens from '../screens/CardScreens';
 import TestScreens from '../screens/TestScreens';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import SameCardScreen from '../screens/SameCardScreen';
+import EnterTextTest from '../screens/EnterTextTest';
 
 const Stack = createNativeStackNavigator();
 
@@ -62,6 +63,13 @@ const RootNavigation = () => {
         {
             name: APP_ROUTES.EDIT_PROFILE_SCREEN,
             component: EditProfileScreen,
+            options: {
+                title: '',
+            },
+        },
+        {
+            name: APP_ROUTES.ENTER_TEXT_TEST,
+            component: EnterTextTest,
             options: {
                 title: '',
             },

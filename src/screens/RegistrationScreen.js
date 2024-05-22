@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Button, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import Input from '../components/Input'
 import PrimaryButton from '../components/PrimaryButton'
 import FormTitle from '../components/FormTitle'
 import { strings } from '../localization/localization'
 import { APP_ROUTES } from '../constants/routes'
-import { storeObject } from '../storage/AsyncStorage'
+import { getObject, storeObject } from '../storage/AsyncStorage'
 import { APP_STORAGE } from '../constants/const'
 import { data } from '../data/auth/data'
 import { setFontStyles } from '../utils/setFontStyle'
@@ -19,6 +19,7 @@ const RegistrationScreen = ({ navigation }) => {
   const [period, setPeriod] = useState('');
 
   const [error, setError] = useState(false);
+
   const errorText = () => {
     if (!name || !target || !period) {
       return strings['Вы не заполнили поля'];
@@ -28,6 +29,7 @@ const RegistrationScreen = ({ navigation }) => {
     }
   };
 
+  
 
   const onPressRegister = async () => {
     if (name) {
@@ -37,7 +39,12 @@ const RegistrationScreen = ({ navigation }) => {
         period: period,
         card: [],
       }
+      let userProgress = {
+        themes: [],
+        words: [],
+      };
       await storeObject(APP_STORAGE.userProfile, userData);
+      await storeObject(APP_STORAGE.userProgress, userProgress);
       navigation.replace(APP_ROUTES.BOTTOM_TAB);
     }
     else {

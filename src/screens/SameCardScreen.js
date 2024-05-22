@@ -7,28 +7,16 @@ import { data } from '../data/MainData';
 import { APP_COLORS } from '../constants/colors';
 import { setFontStyles } from '../utils/setFontStyle';
 import ModalMessage from '../components/ModalMessage';
+import { APP_ROUTES } from '../constants/routes';
 
 const SameCardScreen = ({ navigation, route }) => {
-  //Таймер
   const cards = route?.params?.card;
+  console.log("SameCardScreen/data", cards);
+  const n = 4;
   const [seconds, setSeconds] = useState(0);
   const [timer, setTimer] = useState(false);
-  useEffect(() => {
-    let interval = null;
-    if (timer) {
-      interval = setInterval(() => {
-        setSeconds(seconds => seconds + 1);
-      }, 1000);
-    } else if (!timer && seconds !== 0) {
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [timer, seconds]);
-
   const [firstCard, setFirstCard] = useState(null);
   const [secondCard, setSecondCard] = useState(null);
-
-  const n = 4;
   const [cardLenght, setCardLenght] = useState(n);
   const [randomCards, setRandomCards] = useState();
   const [finishCard, setFinishCard] = useState([]);
@@ -36,18 +24,35 @@ const SameCardScreen = ({ navigation, route }) => {
   const [message, setMessage] = useState(0);
   const [messageText, setMessageText] = useState('');
 
+  //Таймер
+  useEffect(() => {
+    let interval = null;
+    if (timer) {
+      interval = setInterval(() => {
+        setSeconds(prev => prev + 1);
+      }, 1000);
+    } else if (!timer && seconds !== 0) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [timer, seconds]);
+
+  console.log('second: ', seconds);
+
   useEffect(() => {
     createRandomData(cards);
     setTimer(true)
   }, [])
+
   useEffect(() => {
     if (finishCard.length == n * 2) {
       setFinishCard([]);
       createRandomData(cards);
-      setMessage(1);
       setMessageText(strings['Правильно'])
+      setMessage(1);
     }
     else if (allCard.length / 2 == cards.length) { // Finish
+      setTimer(false);
       if (seconds < 25) {
         setMessageText(seconds + " " + strings['секунд 🎉. Жылдамдылық таныттың']);
       }
@@ -55,8 +60,9 @@ const SameCardScreen = ({ navigation, route }) => {
         setMessageText(seconds + " " + strings['секунд. Сен жылдамырақ жасай аласың!']);
       }
       setMessage(1);
-      setTimer(false);
-      Alert.alert("Finish")
+      setTimeout(() => {
+        navigation.replace(APP_ROUTES.ENTER_TEXT_TEST, route?.params);
+      }, 1500)
     }
     console.log("\n---------> ", allCard.length / 2, cards.length, "\n");
   }, [allCard, finishCard])
@@ -148,14 +154,16 @@ const SameCardScreen = ({ navigation, route }) => {
 
     const isDisabled = () => {
       if (item?.index == firstCard?.index || item?.index == secondCard?.index) {
-        return false;
+        return true;
       }
       else {
         for (let index = 0; index < finishCard.length; index++) {
           if (finishCard[index] == item?.index) {
             return true;
           }
-
+          else {
+            // return false;
+          }
         }
       }
     }
@@ -179,7 +187,7 @@ const SameCardScreen = ({ navigation, route }) => {
       numColumns={2}
       keyExtractor={(_, index) => index}
     />
-    <ModalMessage setValue={setMessage} value={message ? true : false}>
+    <ModalMessage setValue={setMessage} value={message ? true : false} time={1250}>
       {message == 1 ?
         <FormTitle title={messageText} /> :
         message == 2 ? <FormTitle title={messageText} /> : null

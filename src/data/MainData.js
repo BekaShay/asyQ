@@ -3,6 +3,7 @@ export const data = [
         "id": 1,
         "theme": "Еда",
         "image": "https://i.pinimg.com/564x/34/f4/8f/34f48f5c56c938642b80b0555e5adf82.jpg",
+        "targets": ["Культурa", "Коммуникация"],
         "card": [
             {
                 "id": 11,
@@ -70,11 +71,12 @@ export const data = [
         "id": 2,
         "theme": "Части тела",
         "image": "https://i.pinimg.com/564x/08/bc/ec/08bcecfe8256a252112ea2fde39cc5e6.jpg",
+        "targets": ["Учебa"],
         "card": [
             {
                 "id": 21,
                 "question": "Көз",
-                "image": "",
+                "image": "https://i.pinimg.com/564x/5f/58/0b/5f580be9c2457eb8fe184fffa4321ecd.jpg",
                 "answer": "Глаза"
             },
             {
@@ -86,19 +88,19 @@ export const data = [
             {
                 "id": 23,
                 "question": "Қас",
-                "image": "https://images.pexels.com/photos/3373714/pexels-photo-3373714.jpeg?auto=compress&cs=tinysrgb&w=400",
+                "image": "https://i.pinimg.com/564x/a8/3d/f2/a83df26d25e6951ab6bd66c35c30072b.jpg",
                 "answer": "Брови"
             },
             {
                 "id": 24,
                 "question": "Құлақ",
-                "image": "https://media.istockphoto.com/id/1183567114/photo/female-ear.jpg?s=612x612&w=is&k=20&c=NhwETmEWRcD7QacYaP8ldLzdSmIYW8iDtiBGKkcCfG4=",
+                "image": "https://i.pinimg.com/564x/3a/8d/be/3a8dbed7c795e75ec6a5728d29c9c6ed.jpg",
                 "answer": "Уши"
             },
             {
                 "id": 25,
                 "question": "Ауыз",
-                "image": "https://images.pexels.com/photos/65665/smile-mouth-teeth-laugh-65665.jpeg?auto=compress&cs=tinysrgb&w=400",
+                "image": "https://i.pinimg.com/564x/03/a0/e5/03a0e51770580e1e139028f262027054.jpg",
                 "answer": "Рот"
             },
             {
@@ -110,7 +112,7 @@ export const data = [
             {
                 "id": 27,
                 "question": "Тіс",
-                "image": "https://images.pexels.com/photos/3762453/pexels-photo-3762453.jpeg?auto=compress&cs=tinysrgb&w=400",
+                "image": "https://i.pinimg.com/564x/f1/ce/fa/f1cefa6690a21e2914dbf9e2a6ba5992.jpg",
                 "answer": "Зубы"
             },
             {
@@ -137,6 +139,7 @@ export const data = [
         "id": 3,
         "theme": "Животные",
         "image": "https://i.pinimg.com/736x/45/6f/5f/456f5fb46bc47cb05a0f5cd4961e6534.jpg",
+        "targets": ["Путешествия"],
         "card": [
             {
                 "id": 31,
@@ -204,6 +207,7 @@ export const data = [
         "id": 4,
         "theme": "Цветы",
         "image": "https://i.pinimg.com/564x/97/42/16/974216661c40f101cf0a017213f300b3.jpg",
+        "targets": ["Путешествия"],
         "card": [
             {
                 "id": 41,
@@ -220,7 +224,7 @@ export const data = [
             {
                 "id": 43,
                 "question": "Қызғалдақ",
-                "image": "https://images.pexels.com/photos/54186/tulips-flowers-tulip-bouquet-violet-54186.jpeg?auto=compress&cs=tinysrgb&w=400",
+                "image": "https://i.pinimg.com/564x/aa/59/fe/aa59fede81ac7d55181d276dd5414817.jpg",
                 "answer": "Тюльпан"
             },
             {
@@ -250,13 +254,13 @@ export const data = [
             {
                 "id": 48,
                 "question": "Жалбыз",
-                "image": "",
+                "image": "https://i.pinimg.com/236x/76/53/8c/76538cebdf75d483ece19aa9ff1a6121.jpg",
                 "answer": "Мята"
             },
             {
                 "id": 49,
                 "question": "Райхан",
-                "image": "",
+                "image": "https://i.pinimg.com/236x/05/83/82/058382f9086bc217163fe3b31c25317e.jpg",
                 "answer": "Базилик"
             },
             {
@@ -271,6 +275,7 @@ export const data = [
         "id": 5,
         "theme": "Профессии",
         "image": "https://i.pinimg.com/564x/a5/7e/82/a57e82615f4f9a81ecc5f5a0e5c6e5a8.jpg",
+        "targets": ["Работа"],
         "card": [
             {
                 "id": 51,
@@ -293,7 +298,7 @@ export const data = [
             {
                 "id": 54,
                 "question": "Кәсіпкер",
-                "image": "",
+                "image": "https://i.pinimg.com/736x/75/dc/f7/75dcf709087cfd9453c44c02c02441dc.jpg",
                 "answer": "Бизнесмен"
             },
             {
@@ -311,13 +316,13 @@ export const data = [
             {
                 "id": 57,
                 "question": "Сатушы",
-                "image": "",
+                "image": "https://i.pinimg.com/236x/df/43/91/df4391a50717e035924935030b07d22c.jpg",
                 "answer": "Продавец"
             },
             {
                 "id": 58,
                 "question": "Зергер",
-                "image": "",
+                "image": "https://i.pinimg.com/236x/ec/ad/72/ecad7218d746b3085ac1b69d91ea19d8.jpg",
                 "answer": "Ювелир"
             },
             {
@@ -338,6 +343,7 @@ export const data = [
         "id": 6,
         "theme": "Цвета",
         "image": "https://i.pinimg.com/736x/c7/75/a3/c775a3bddf0e902c035f4c2d247b1500.jpg",
+        "targets": ["Культурa"],
         "card": [
             {
                 "id": 61,

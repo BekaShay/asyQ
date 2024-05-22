@@ -5,5 +5,5 @@ export const APP_CONST = {
 
 export const APP_STORAGE = {
     userProfile: 'userProfile',
-    userProgres: 'userProgres',
+    userProgress: 'userProgress',
 };

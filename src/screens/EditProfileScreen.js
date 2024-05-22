@@ -11,14 +11,12 @@ import { APP_ROUTES } from '../constants/routes';
 
 const EditProfileScreen = ({ navigation }) => {
     const [name, setName] = useState('');
-    const [age, setAge] = useState('');
 
     const onPressSave = async () => {
         let prevProfile = await getObject(APP_STORAGE.userProfile);
         let userData = {
+            ...prevProfile,
             name: name ? name : prevProfile.name,
-            age: age ? age : prevProfile.age,
-            card: prevProfile.card,
         }
         await storeObject(APP_STORAGE.userProfile, userData);
         navigation.replace(APP_ROUTES.BOTTOM_TAB);
@@ -29,7 +27,6 @@ const EditProfileScreen = ({ navigation }) => {
             <View style={styles.card}>
                 <FormTitle logo title={strings['Редактировать профиль']} style={styles.title} />
                 <Input style={styles.inputs} title={strings['Имя']} placeholder={strings['Имя']} value={name} getValue={setName} />
-                <Input style={styles.inputs} title={strings['Возраст']} placeholder={strings['Возраст']} value={age} getValue={setAge} />
                 <PrimaryButton text={strings['Сохранить']} onPress={onPressSave} />
             </View>
         </View>
@@ -54,5 +51,8 @@ const styles = StyleSheet.create({
     },
     button: {
 
+    },
+    title: {
+        marginBottom: 12,
     },
 })
