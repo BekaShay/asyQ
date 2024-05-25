@@ -72,7 +72,7 @@ const ProfileScreen = ({ navigation }) => {
                 <FormTitle logo title={profileData?.name} text={strings['Цель'] + ': ' + profileData?.target} />
             </View>
             <View style={styles.card2}>
-                <FormTitle title={strings['Прогресс']} text={strings['Темы'] + ": " + data.length + " / " + profileData?.card.length} />
+                <FormTitle title={strings['Прогресс']} text={strings['Темы'] + ": " + profileData?.card.length + " / " + data.length} />
                 <View style={styles.line}>
                     <View
                         style={{

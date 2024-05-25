@@ -5,18 +5,16 @@ import { strings } from '../localization/localization';
 import { APP_COLORS } from '../constants/colors';
 import PrimaryButton from '../components/PrimaryButton';
 import CharacterLimitInput from '../components/CharacterLimitInput';
-import ModalMessage from '../components/ModalMessage';
 import { setFontStyles } from '../utils/setFontStyle';
 import { APP_ROUTES } from '../constants/routes';
 import { getObject, storeObject } from '../storage/AsyncStorage';
 import { APP_STORAGE } from '../constants/const';
+import ToastMessage from '../components/ToastMessage';
 
 const EnterTextTest = ({ navigation, route }) => {
     const [text, setText] = useState('');
-    const [message, setMessage] = useState(0);
     const [index, setIndex] = useState(0);
     const [errorCount, setErrorCount] = useState(0);
-    const [errorText, setErrorText] = useState('');
     const [resetInput, setResetInput] = useState(false);
     const data = route?.params;
     const [repeatWords, setRepeatWords] = useState([]); //repeat words
@@ -46,7 +44,6 @@ const EnterTextTest = ({ navigation, route }) => {
     const setProgress = async () => {
         const response = await getObject(APP_STORAGE.userProgress);
         const currentTime = new Date();
-        console.log("11");
         const params = {
             ...response,
             words: [
@@ -72,22 +69,28 @@ const EnterTextTest = ({ navigation, route }) => {
                 setIndex(index + 1);
                 setText(null);
                 setResetInput(!resetInput);
-                setMessage(1);
+                ToastMessage(text1 = strings['Правильно'], type = "success", time = 8000);
             }
             else { // finish test
                 console.log("2");
                 setText(null);
                 setResetInput(!resetInput);
-                setMessage(1);
+                ToastMessage(text1 = strings['Правильно'], type = "success", time = 8000);
                 setProgress();
                 setResultInStorage();
             }
         }
         else { //error test
-            console.log("3");
+            let temp = '';
+            for (let i = 0; i < text?.length; i++) { //error symbols
+                if (text?.toLowerCase()[i] != data?.card[index]?.question?.toLowerCase()[i]) {
+                    temp += text?.toLowerCase()[i];
+                }
+            }
             setText(null);
             setResetInput(!resetInput);
-            setMessage(2);
+
+            ToastMessage(text1 = strings['Ошибка'] + " 🔴 " + strings['Попробуйте снова'] + ". " + strings["Неправильные буквы"] + ": " + temp, type = "error", time = 8000);
             setErrorCount(prev => prev + 1)
             setRepeatWords(prev => {
                 const newItem = data?.card[index]?.id;
@@ -100,14 +103,25 @@ const EnterTextTest = ({ navigation, route }) => {
                 }
             });
         }
+    }
+    const onPressIdontKnow = () => {
+        setIndex(index + 1);
+        setErrorCount(prev => prev + 1)
+        setRepeatWords(prev => {
+            const newItem = data?.card[index]?.id;
+            const existingIndex = prev.findIndex(item => item === newItem);
 
-        let temp = '';
-        for (let i = 0; i < text?.length; i++) { //error symbols
-            if (text?.toLowerCase()[i] != data?.card[index]?.question?.toLowerCase()[i]) {
-                temp += text?.toLowerCase()[i];
+            if (existingIndex !== -1) {
+                return prev.map((item, idx) => (idx === existingIndex ? newItem : item));
+            } else {
+                return [...prev, newItem];
             }
+        });
+        setText(null);
+        setResetInput(!resetInput);
+        if (index == data?.card.length - 1) {
+            setResultInStorage();
         }
-        setErrorText(temp); //set error symbols
     }
 
     return (
@@ -123,11 +137,11 @@ const EnterTextTest = ({ navigation, route }) => {
             <PrimaryButton
                 text={strings['Проверить']}
                 onPress={onPress} />
-            <ModalMessage setValue={setMessage} value={message ? true : false} time={1250}>
-                {message == 1 ?
-                    <FormTitle title={strings['Правильно'] + " ✅"} text={strings['Вы угадали слова']} />
-                    : message == 2 ? <FormTitle title={strings['Ошибка'] + " 🔴"} text={strings['Попробуйте снова'] + ". " + strings["Неправильные буквы"] + ": " + errorText} /> : null}
-            </ModalMessage>
+            {index == data?.card.length - 1 ? null :
+                <PrimaryButton
+                    text={strings['Я не знаю ответа']}
+                    style={{ marginTop: 12 }}
+                    onPress={onPressIdontKnow} />}
         </View>
     );
 };

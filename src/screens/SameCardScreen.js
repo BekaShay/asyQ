@@ -6,8 +6,8 @@ import FormTitle from '../components/FormTitle';
 import { data } from '../data/MainData';
 import { APP_COLORS } from '../constants/colors';
 import { setFontStyles } from '../utils/setFontStyle';
-import ModalMessage from '../components/ModalMessage';
 import { APP_ROUTES } from '../constants/routes';
+import ToastMessage from '../components/ToastMessage';
 
 const SameCardScreen = ({ navigation, route }) => {
   const cards = route?.params?.card;
@@ -21,8 +21,6 @@ const SameCardScreen = ({ navigation, route }) => {
   const [randomCards, setRandomCards] = useState();
   const [finishCard, setFinishCard] = useState([]);
   const [allCard, setAllCard] = useState([]);
-  const [message, setMessage] = useState(0);
-  const [messageText, setMessageText] = useState('');
 
   //Таймер
   useEffect(() => {
@@ -44,22 +42,24 @@ const SameCardScreen = ({ navigation, route }) => {
     setTimer(true)
   }, [])
 
+  const getText = () => {
+    if (seconds < 25) {
+      return seconds + " " + 'секунд 🎉. Жылдамдылық таныттың';
+    }
+    else {
+      return seconds + " " + 'секунд. Сен жылдамырақ жасай аласың!';
+    }
+  }
+
   useEffect(() => {
     if (finishCard.length == n * 2) {
       setFinishCard([]);
       createRandomData(cards);
-      setMessageText(strings['Правильно'])
-      setMessage(1);
+      ToastMessage(text1 = strings['Правильно'], type = "success", time = 8000);
     }
     else if (allCard.length / 2 == cards.length) { // Finish
       setTimer(false);
-      if (seconds < 25) {
-        setMessageText(seconds + " " + strings['секунд 🎉. Жылдамдылық таныттың']);
-      }
-      else {
-        setMessageText(seconds + " " + strings['секунд. Сен жылдамырақ жасай аласың!']);
-      }
-      setMessage(1);
+      ToastMessage(text1 = getText(), type = "success", time = 8000);
       setTimeout(() => {
         navigation.replace(APP_ROUTES.ENTER_TEXT_TEST, route?.params);
       }, 1500)
@@ -124,14 +124,12 @@ const SameCardScreen = ({ navigation, route }) => {
           setSecondCard(null);
         }
         else if (firstCard?.id != item?.id) {
-          setMessage(2);
-          setMessageText(strings['Не правильно']);
+          ToastMessage(text1 = strings['Не правильно'], type = "error", time = 8000);
           setFirstCard(null);
           setSecondCard(null);
         }
         else {
-          setMessage(2);
-          setMessageText(strings['Не правильно']);
+          ToastMessage(text1 = strings['Не правильно'], type = "error", time = 8000);
           setFirstCard(null);
           setSecondCard(null);
         }
@@ -178,7 +176,6 @@ const SameCardScreen = ({ navigation, route }) => {
 
 
 
-  console.log('--->', message);
   return <View style={styles.view}>
     <FormTitle style={styles.title} title={strings["Найди пару"]} text={'Время: ' + seconds} />
     <FlatList
@@ -187,12 +184,6 @@ const SameCardScreen = ({ navigation, route }) => {
       numColumns={2}
       keyExtractor={(_, index) => index}
     />
-    <ModalMessage setValue={setMessage} value={message ? true : false} time={1250}>
-      {message == 1 ?
-        <FormTitle title={messageText} /> :
-        message == 2 ? <FormTitle title={messageText} /> : null
-      }
-    </ModalMessage>
   </View>
 };
 
